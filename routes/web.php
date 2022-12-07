@@ -29,3 +29,22 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/event', function () {
+
+    // Note: No need for manually firing the event as we do use $dispatchesEvents property inside Order model
+    $order = \App\Models\Order::create([
+        "order_number" => random_int(1000, 9999),
+        "user_id" => 1,
+    ]);
+
+    \App\Events\OrderPlaced::dispatch($order);
+});
+
+Route::get('/notifications', function () { return view("notifications"); });
+
+Route::get('/like', function () {
+    event(new \App\Events\NotifyLikedUsers('Someone'));
+    
+    return "Event has been sent !";
+});
