@@ -13,6 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/event', function () {
+
+    // Note: No need for manually firing the event as we do use $dispatchesEvents property inside Order model
+    $order = \App\Models\Order::create([
+        "order_number" => random_int(1000, 9999),
+        "user_id" => 1,
+    ]);
+
+    \App\Events\OrderPlaced::dispatch($order);
+});
+
 Route::get('/', function () {
     return view('welcome');
 });

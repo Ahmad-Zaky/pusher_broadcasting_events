@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\OrderPlaced;
+use App\Listeners\UpdateInventoryAboutOrder;
+use App\Listeners\UpdateVendorAboutOrder;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +21,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+
+        // NOTE: no need to register it manually as we use shouldDiscoverEvents() method            
+        // OrderPlaced::class => [
+        //     UpdateVendorAboutOrder::class,
+        //     UpdateInventoryAboutOrder::class,
+        // ],
     ];
 
     /**
@@ -37,6 +46,6 @@ class EventServiceProvider extends ServiceProvider
      */
     public function shouldDiscoverEvents()
     {
-        return false;
+        return true;
     }
 }

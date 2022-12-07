@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Order;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
@@ -13,6 +14,12 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
+
+// NOTE: This will be used in case we are using authenticated channels
+// Broadcast::channel('orders.{orderId}', function ($user, $orderId) {
+//     return (int) $user->id === (int) Order::find($orderId)->user_id;
+// });
+
+Broadcast::channel('orders', function () {
+    return true;
 });
