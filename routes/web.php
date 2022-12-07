@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,17 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/event', function () {
-
-    // Note: No need for manually firing the event as we do use $dispatchesEvents property inside Order model
-    $order = \App\Models\Order::create([
-        "order_number" => random_int(1000, 9999),
-        "user_id" => 1,
-    ]);
-
-    \App\Events\OrderPlaced::dispatch($order);
-});
-
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
